@@ -1,0 +1,19 @@
+Vagrant.configure("2") do |config|
+  # Определение настроек виртуальной машины...
+  config.vm.box = "ubuntu/bionic64"
+
+  # Установка провайдера (в данном случае - VirtualBox)
+  config.vm.provider "virtualbox" do |vb|
+    # Опциональные настройки провайдера (память, количество CPU и т. д.)
+    vb.memory = "1024"
+    vb.cpus = 2
+  end
+
+  # Создание директории на виртуальной машине
+  config.vm.provision "shell", inline: <<-SHELL
+    mkdir -p /home/vagrant/services
+  SHELL
+
+  # Синхронизация папки с исходным кодом из WSL на хост-системе в виртуальную машину
+  config.vm.synced_folder "C:/services", "/home/vagrant/services"
+end

@@ -1,0 +1,277 @@
+{
+	"info": {
+		"_postman_id": "81bf0180-14f8-4a88-862d-a9ac7a9772d0",
+		"name": "Application Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login User",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Login as a regular user\", function() {",
+							"    pm.response.to.have.status(200)",
+							"    pm.collectionVariables.set(\"BEARER\", pm.response.headers.get(\"authorization\"));",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{BASIC}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}:{{USERS_PORT}}/api/v1/auth/authorize",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{USERS_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"auth",
+						"authorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hotles",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get hotels info\", function() {",
+							"    pm.response.to.have.status(200)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/hotels",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{GATEWAY_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"hotels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Hotel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get hotels info\", function() {",
+							"    pm.response.to.have.status(200)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/hotels/{{HOTEL_UID}}",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{GATEWAY_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"hotels",
+						"{{HOTEL_UID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Hotel",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Book hotel\", function() {",
+							"    pm.response.to.have.status(201)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"hotelUid\":\"{{HOTEL_UID}}\",\n    \"room\": 1,\n    \"paymentInfo\": \"somePaymentInfo\",\n    \"dateInterval\":{\n                \"from\": \"2022-10-18T00:00:00.000000\",\n                \"to\": \"2022-12-18T00:00:00.000000\"\n            },\n            \"roomCost\":2000\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/booking",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{GATEWAY_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"booking"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User's Loyalty Balance",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get user's loyalty balance\", function() {",
+							"    pm.response.to.have.status(200)",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "authorization",
+						"value": "{{BEARER}}",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "{{API_HOST}}:{{GATEWAY_PORT}}/api/v1/gateway/loyalty",
+					"host": [
+						"{{API_HOST}}"
+					],
+					"port": "{{GATEWAY_PORT}}",
+					"path": [
+						"api",
+						"v1",
+						"gateway",
+						"loyalty"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "BASIC",
+			"value": "Basic VXNlcjpxd2VydHk=",
+			"type": "default"
+		},
+		{
+			"key": "BEARER",
+			"value": "",
+			"type": "default"
+		},
+		{
+			"key": "API_HOST",
+			"value": "localhost",
+			"type": "default"
+		},
+		{
+			"key": "USERS_PORT",
+			"value": "8081",
+			"type": "default"
+		},
+		{
+			"key": "GATEWAY_PORT",
+			"value": "8087",
+			"type": "default"
+		},
+		{
+			"key": "HOTEL_UID",
+			"value": "9d05ba36-bf8d-11eb-8529-0242ac130003",
+			"type": "default"
+		},
+		{
+			"key": "BASIC_ADMIN",
+			"value": "QWRtaW46cXdlcnR5",
+			"type": "default"
+		}
+	]
+}

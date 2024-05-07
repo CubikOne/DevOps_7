@@ -1,0 +1,47 @@
+Vagrant.configure("2") do |config|
+  # Определение настроек виртуальных машин
+  config.vm.define "manager01" do |manager|
+    manager.vm.box = "ubuntu/bionic64"
+    manager.vm.hostname = "manager01"
+    manager.vm.network "private_network", ip: "192.168.50.10"
+    manager.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+
+    manager.vm.synced_folder "C:/Users/TIMUR", "/vagrant"
+    manager.vm.provision "shell", path: "C:/Users/TIMUR/swarm_manager.sh"
+    manager.vm.provision "file", source: "C:/Users/TIMUR/docker-compose.yml", destination: "/home/vagrant/docker-compose.yml"
+    manager.vm.provision "file", source: "C:/Users/TIMUR/sites-enabled", destination: "/home/vagrant/"
+    manager.vm.provision "file", source: "C:/Users/TIMUR/nginx.conf", destination: "/home/vagrant/"
+
+  end
+
+  config.vm.define "worker01" do |worker1|
+    worker1.vm.box = "ubuntu/bionic64"
+    worker1.vm.hostname = "worker01"
+    worker1.vm.network "private_network", ip: "192.168.50.11"
+    worker1.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+
+    worker1.vm.provision "shell", path: "C:/Users/TIMUR/docker_worker.sh"
+
+    worker1.vm.synced_folder "C:/Users/TIMUR", "/vagrant"
+  end
+
+  config.vm.define "worker02" do |worker2|
+    worker2.vm.box = "ubuntu/bionic64"
+    worker2.vm.hostname = "worker02"
+    worker2.vm.network "private_network", ip: "192.168.50.12"
+    worker2.vm.provider "virtualbox" do |vb|
+      vb.memory = "1024"
+      vb.cpus = 1
+    end
+
+    worker2.vm.provision "shell", path: "C:/Users/TIMUR/docker_worker.sh"
+
+    worker2.vm.synced_folder "C:/Users/TIMUR", "/vagrant"
+  end
+end

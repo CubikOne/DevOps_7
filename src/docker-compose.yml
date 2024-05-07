@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: cubikone/school21:my-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: users_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: cubikone/school21:rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+
+  session-service:
+    image: cubikone/school21:session
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+  hotel-service:
+    image: cubikone/school21:hotel
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+  payment-service:
+    image: cubikone/school21:payment
+    ports:
+      - "8084:8084"
+    depends_on:
+      - postgres
+
+  loyalty-service:
+    image: cubikone/school21:loyalty
+    ports:
+      - "8085:8085"
+    depends_on:
+      - postgres
+
+  report-service:
+    image: cubikone/school21:report
+    ports:
+      - "8086:8086"
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  booking-service:
+    image: cubikone/school21:booking
+    ports:
+      - "8083:8083"
+    depends_on:
+      - postgres
+      - rabbitmq
+      - hotel-service
+      - payment-service
+      - loyalty-service
+
+  gateway-service:
+    image: cubikone/school21:gateway
+    ports:
+      - "8087:8087"
+    depends_on:
+      - session-service
+      - hotel-service
+      - booking-service
+      - payment-service
+      - loyalty-service
+      - report-service
+
+  nginx:
+    image: cubikone/school21:my-nginxnew
+    ports:
+      - "80:80"
+    depends_on:
+      - gateway-service
+      - session-service
+
+volumes:
+  postgres-data:
+  rabbitmq-data:

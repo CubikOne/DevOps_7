@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  portainer:
+    image: portainer/portainer-ce
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
+volumes:
+  portainer_data:
